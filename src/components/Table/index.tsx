@@ -9,24 +9,23 @@ interface Table {
 }
 
 interface Props {
-  weekResults?: Table[],
+  table?: Table[],
 }
 
+const Table: React.FC<Props> = ({ table }) => {
 
-const Results: React.FC<Props> = ({ weekResults }) => {
-
-  useEffect(() => {}, [weekResults])
+  useEffect(() => {}, [table])
   
 
-  const showResults = () => {
-    console.log(weekResults);
+  const showTable = () => {
+    console.log(table);
   }
 
   return (
     <>
-      {weekResults && showResults()}
+      {table && showTable()}
     </>
   );
 }
 
-export default Results;
+export default Table;
