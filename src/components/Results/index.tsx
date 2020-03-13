@@ -1,21 +1,17 @@
 import React, { useEffect } from 'react';
 import { Row, Col } from 'reactstrap';
 
+import {Table} from '../../context/index';
+
 import './index.css';
 
-interface Table {
-  name: string,
-  goalsScored: number,
-  goalsConceded: number,
-  points: number,
-}
 
 interface Props {
   weekResults: Table[],
 }
 
 
-const Results: React.FC<Props> = ({ weekResults }) => {
+const Results: React.FC<Props> = ({ weekResults}) => {
 
   useEffect(() => { }, [weekResults])
 
@@ -27,10 +23,20 @@ const Results: React.FC<Props> = ({ weekResults }) => {
       for (let i = 0; i < weekResults?.length - 1; i++) {
         results.push(
           <Row className="result" key={i}>
-            <Col lg="3" className="team-left"><b>{weekResults[i]?.name}</b></Col>
-            <Col lg="1" className="score-left"><b>{weekResults[i]?.goalsScored}</b></Col>
-            <Col lg="1" className="score-right"><b>{weekResults[++i]?.goalsScored}</b></Col>
-            <Col lg="3" className="team-right"><b>{weekResults[i]?.name}</b></Col>
+            <Col
+              lg="5" md="5" sm="5" xs="5"
+              className={"team-left " + weekResults[i]?.trend[0]}
+            >
+              <b>{weekResults[i]?.name}</b>
+            </Col>
+            <Col lg="1" md="1" sm="1" xs="1" className="score-left"><b>{weekResults[i]?.goalsScored}</b></Col>
+            <Col lg="1" md="1" sm="1" xs="1" className="score-right"><b>{weekResults[++i]?.goalsScored}</b></Col>
+            <Col
+              lg="5" md="5" sm="5" xs="5"
+              className={"team-right " + weekResults[i]?.trend[0]}
+            >
+              <b>{weekResults[i]?.name}</b>
+            </Col>
           </Row>
         )
       }
@@ -39,7 +45,6 @@ const Results: React.FC<Props> = ({ weekResults }) => {
 
   return (
     <>
-      <h1>Results</h1>
       {showResults()}
     </>
   );

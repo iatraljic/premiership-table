@@ -1,0 +1,44 @@
+.table-row {
+    height: 8vh;
+    font-size: 1.2rem;
+    border-top: 1px solid #e8e8e8;
+    display: flex;
+    align-items: center;
+}
+
+.form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: gray;
+    color: white;
+    text-transform: uppercase;
+}
+
+.win {
+    background-color: #13cf00;
+}
+
+.lose {
+    background-color: #d81820;
+}
+
+@media screen and (max-width: 320px) {
+    .table-row {
+        height: 8vh;
+        font-size: 10px;
+        border-top: 1px solid #e8e8e8;
+        display: flex;
+        align-items: center;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .table-row {
+        height: 8vh;
+        font-size: 10px;
+        border-top: 1px solid #e8e8e8;
+        display: flex;
+        align-items: center;
+    }
+}

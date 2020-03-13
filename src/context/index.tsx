@@ -19,16 +19,20 @@ interface Result {
 type ContextProps = {
   results: Result[],
   weekResults: Table[],
+  matchWeek: number,
   changeMatchWeek: (matchWeek: number) => void,
   table: Table[],
 }
 
-interface Table {
+export interface Table {
   name: string,
   goalsScored: number,
   goalsConceded: number,
   trend: Array<string>,
   points: number,
+  win: number,
+  lose: number,
+  draw: number,
   gd?: number,
 }
 
@@ -37,6 +41,7 @@ const ContextlProvider: React.FC<Props> = ({ children }) => {
   const [results, setResults] = useState<Result[]>([]);
   const [weekResults, setWeekResults] = useState<Table[]>([]);
   const [table, setTable] = useState<Table[]>([]);
+  const [matchWeek, setMatchWeek] = useState<number>(38);
 
   useEffect(() => {
 
@@ -53,6 +58,7 @@ const ContextlProvider: React.FC<Props> = ({ children }) => {
   }, []);
 
   const changeMatchWeek = (matchWeek: number) => {
+    setMatchWeek(matchWeek);
     setTableResults(results.filter(el => el.round <= matchWeek));
   }
 
@@ -69,11 +75,17 @@ const ContextlProvider: React.FC<Props> = ({ children }) => {
         goalsScored: score[0],
         goalsConceded: score[1],
         points: score[0] > score[1] ? 3 : (score[0] < score[1] ? 0 : 1),
+        win: score[0] > score[1] ? 1 : 0,
+        lose: score[0] < score[1] ? 1 : 0,
+        draw: score[0] === score[1] ? 1 : 0,
         trend: score[0] > score[1] ? ['w'] : (score[0] < score[1] ? ['l'] : ['d']),
       }, {
         name: team[1],
         goalsScored: score[1],
         goalsConceded: score[0],
+        win: score[1] > score[0] ? 1 : 0,
+        lose: score[1] < score[0] ? 1 : 0,
+        draw: score[1] === score[0] ? 1 : 0,
         points: score[1] > score[0] ? 3 : (score[1] < score[0] ? 0 : 1),
         trend: score[1] > score[0] ? ['w'] : (score[1] < score[0] ? ['l'] : ['d']),
       });
@@ -101,6 +113,9 @@ const ContextlProvider: React.FC<Props> = ({ children }) => {
               tableTemp[j].goalsScored += arr[k].goalsScored;
               tableTemp[j].goalsConceded += arr[k].goalsConceded;
               tableTemp[j].points += arr[k].points;
+              tableTemp[j].win += arr[k].win;
+              tableTemp[j].lose += arr[k].lose;
+              tableTemp[j].draw += arr[k].draw;
               if (results.length - i < 5)
                 tableTemp[j].trend.push(arr[k].trend[0]);
             }
@@ -130,6 +145,7 @@ const ContextlProvider: React.FC<Props> = ({ children }) => {
       value={{
         results,
         weekResults,
+        matchWeek,
         changeMatchWeek,
         table,
       }}

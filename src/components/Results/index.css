@@ -8,25 +8,44 @@
 }
 
 .team-left, .score-left {
+    padding: 0;
     display: flex;
     justify-content: flex-end;
+    align-items: center;
 }
 
 .team-right, .score-right {
+    padding: 0;
     display: flex;
-    justify-content: flex-start;    
+    justify-content: flex-start;
+    align-items: center;    
 }
 
-.score-left, .score-right {
+.score-left > b, .score-right > b {
     padding: 2px 0 2px 0;
+    margin: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 2%;
+    width: 80%;
     color: white;
     background-color: #37063b;
 }
 
-.score-left {
+.score-left > b {
     border-right: 1px solid white;
+}
+
+.w {
+    color: green;
+}
+
+.l {
+    color: red;
+}
+
+@media screen and (max-width: 768px) {
+    .result {
+        font-size: 10px;
+    }
 }
