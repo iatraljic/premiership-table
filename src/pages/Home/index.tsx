@@ -11,7 +11,7 @@ const Home: React.FC = () => {
     const { results, weekResults, table, changeMatchWeek} = useContext(MainContext);
 
     useEffect(() => {
-    }, [results, weekResults, table]);
+    }, [table]);
 
     return (
         <Container>
