@@ -1,6 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
-import Results from '../components/Results';
 
 export const MainContext = createContext<Partial<ContextProps>>({});
 
@@ -116,7 +115,7 @@ const ContextlProvider: React.FC<Props> = ({ children }) => {
       if(a.points === b.points){
         if(a.gd!==undefined && b.gd!== undefined && a.gd === b.gd)
           return (a.goalsScored > b.goalsScored ? -1 : 1);
-        else if(a.gd!==undefined && b.gd!== undefined)
+        else if(a.gd !== undefined && b.gd !== undefined)
           return (a.gd > b.gd ? -1 : 1)
       } else
         return(a.points > b.points ? -1 : 1)

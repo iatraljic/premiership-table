@@ -23,8 +23,9 @@ const Menu: React.FC<Props> = ({ numberOfRounds, changeMatchWeek}) => {
 
   return (
     <>
-      <Label>Select match week:</Label>
+      <Label style={{color: '#963cff',fontSize: '12px', fontWeight: 'bold', margin: 0}}>Select match week:</Label>
       <Input
+        style={{border: 'none', fontSize: '18px', fontWeight: 'bold', padding: 0}}
         type='select'
         name='select'
         onChange={(e) =>

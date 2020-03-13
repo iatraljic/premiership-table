@@ -1,0 +1,32 @@
+.result {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    height: 6vh;
+    border-top: 1px solid #e8e8e8;
+    font-size: 1.2rem;
+}
+
+.team-left, .score-left {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.team-right, .score-right {
+    display: flex;
+    justify-content: flex-start;    
+}
+
+.score-left, .score-right {
+    padding: 2px 0 2px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2%;
+    color: white;
+    background-color: #37063b;
+}
+
+.score-left {
+    border-right: 1px solid white;
+}
