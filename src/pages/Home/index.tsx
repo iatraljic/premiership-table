@@ -24,6 +24,7 @@ const Home: React.FC = () => {
                     margin: '0 0 5vh 0',
                     display: 'flex',
                     alignItems: 'center',
+                    justifyContent: 'center'
                 }}
             >
                 <Col lg="4">

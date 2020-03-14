@@ -37,11 +37,11 @@
 }
 
 .w {
-    color: green;
+    color: #13cf00;
 }
 
 .l {
-    color: red;
+    color: #d81820;
 }
 
 @media screen and (max-width: 768px) {

@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Row, Col} from 'reactstrap';
 
-import {Table} from '../../context/index';
+import {TableI} from '../../context/index';
 
 import './index.css';
 
 interface Props {
-  tableP: Table[],
+  tableP: TableI[],
 }
 
 const TableC: React.FC<Props> = ({ tableP }) => {

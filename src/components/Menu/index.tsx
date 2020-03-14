@@ -1,6 +1,5 @@
 import React from 'react';
 import { Input, Label } from 'reactstrap';
-import './index.css';
 
 interface Props {
   numberOfRounds: number,

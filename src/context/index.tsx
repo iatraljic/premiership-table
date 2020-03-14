@@ -16,15 +16,7 @@ interface Result {
   matches: Array<Match>,
 }
 
-type ContextProps = {
-  results: Result[],
-  weekResults: Table[],
-  matchWeek: number,
-  changeMatchWeek: (matchWeek: number) => void,
-  table: Table[],
-}
-
-export interface Table {
+export interface TableI {
   name: string,
   goalsScored: number,
   goalsConceded: number,
@@ -36,11 +28,19 @@ export interface Table {
   gd?: number,
 }
 
+type ContextProps = {
+  results: Result[],
+  weekResults: TableI[],
+  matchWeek: number,
+  changeMatchWeek: (matchWeek: number) => void,
+  table: TableI[],
+}
+
 const ContextlProvider: React.FC<Props> = ({ children }) => {
 
   const [results, setResults] = useState<Result[]>([]);
-  const [weekResults, setWeekResults] = useState<Table[]>([]);
-  const [table, setTable] = useState<Table[]>([]);
+  const [weekResults, setWeekResults] = useState<TableI[]>([]);
+  const [table, setTable] = useState<TableI[]>([]);
   const [matchWeek, setMatchWeek] = useState<number>(38);
 
   useEffect(() => {
@@ -63,8 +63,8 @@ const ContextlProvider: React.FC<Props> = ({ children }) => {
   }
 
 
-  const getWeekResults = (matches: Match[]): Table[] => {
-    let arr: Table[] = [];
+  const getWeekResults = (matches: Match[]): TableI[] => {
+    let arr: TableI[] = [];
 
     for (let i = 0; i < matches.length; i++) {
       let team = Object.getOwnPropertyNames(matches[i]);
@@ -96,8 +96,8 @@ const ContextlProvider: React.FC<Props> = ({ children }) => {
 
 
   const setTableResults = (results: Result[]) => {
-    let arr: Table[];
-    let tableTemp: Table[] = [];
+    let arr: TableI[];
+    let tableTemp: TableI[] = [];
 
     setWeekResults(getWeekResults(results[results.length - 1].matches));
 
