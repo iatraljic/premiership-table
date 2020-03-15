@@ -1,0 +1,11 @@
+.home-header {
+  height: 5rem;
+  background-color: #37063b;
+  justify-content: center;
+}
+
+.home-header-logo {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  height: 4rem;
+}

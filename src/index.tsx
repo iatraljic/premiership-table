@@ -7,9 +7,9 @@ import Home from './pages/Home';
 
 import './index.css';
 
-
 ReactDOM.render(
-    <ContextlProvider>
-        <Home />
-    </ContextlProvider>
-, document.getElementById('root'));
+  <ContextlProvider>
+    <Home />
+  </ContextlProvider>,
+  document.getElementById('root')
+);

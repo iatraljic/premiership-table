@@ -1,53 +1,61 @@
 import React, { useEffect } from 'react';
 import { Row, Col } from 'reactstrap';
 
-import {TableI} from '../../context/index';
+import { TableI } from '../../context/index';
 
 import './index.css';
 
-
 interface Props {
-  weekResults: TableI[],
+  weekResults: TableI[];
 }
 
-
-const Results: React.FC<Props> = ({ weekResults}) => {
-
-  useEffect(() => { }, [weekResults])
-
+const Results: React.FC<Props> = ({ weekResults }) => {
+  useEffect(() => {
+  }, [weekResults]);
 
   const showResults = () => {
     let results: Array<JSX.Element> = [];
 
     if (weekResults !== undefined)
-      for (let i = 0; i < weekResults?.length - 1; i++) {
+      for (let i = 0; i < weekResults.length; i += 2) {
+        const teamHome = weekResults[i];
+        const teamGuest = weekResults[i + 1];
+        let trendHome = 'd';
+        let trendGuest = 'd';
+
+        if (teamHome.points === 3) {
+          trendHome = 'w';
+        } else if (teamHome.points === 0) {
+          trendHome = 'l';
+        }
+
+        if (teamGuest.points === 3) {
+          trendGuest = 'w';
+        } else if (teamGuest.points === 0) {
+          trendGuest = 'l';
+        }
+
         results.push(
-          <Row className="result" key={i}>
-            <Col
-              lg="5" md="5" sm="5" xs="5"
-              className={"team-left " + weekResults[i]?.trend[0]}
-            >
-              <b>{weekResults[i]?.name}</b>
+          <Row className='result' key={i}>
+            <Col xs='5' className={`team-home ${trendHome}`}>
+              <strong>{teamHome.name}</strong>
             </Col>
-            <Col lg="1" md="1" sm="1" xs="1" className="score-left"><b>{weekResults[i]?.goalsScored}</b></Col>
-            <Col lg="1" md="1" sm="1" xs="1" className="score-right"><b>{weekResults[++i]?.goalsScored}</b></Col>
-            <Col
-              lg="5" md="5" sm="5" xs="5"
-              className={"team-right " + weekResults[i]?.trend[0]}
-            >
-              <b>{weekResults[i]?.name}</b>
+            <Col xs='1' className='score-home'>
+              <strong>{teamHome.goalsScored}</strong>
+            </Col>
+            <Col xs='1' className='score-guest'>
+              <strong>{teamGuest.goalsScored}</strong>
+            </Col>
+            <Col xs='5' className={`team-guest ${trendGuest}`}>
+              <strong>{teamGuest.name}</strong>
             </Col>
           </Row>
-        )
+        );
       }
     return results;
-  }
+  };
 
-  return (
-    <>
-      {showResults()}
-    </>
-  );
-}
+  return <>{showResults()}</>;
+};
 
 export default Results;

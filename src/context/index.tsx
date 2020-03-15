@@ -4,155 +4,227 @@ import axios from 'axios';
 export const MainContext = createContext<Partial<ContextProps>>({});
 
 interface Props {
-  children?: JSX.Element,
+  children?: JSX.Element;
 }
 
 interface Match {
-  [key: string]: number,
+  [key: string]: number;
 }
 
 interface Result {
-  round: number,
-  matches: Array<Match>,
+  round: number;
+  matches: Array<Match>;
 }
 
 export interface TableI {
-  name: string,
-  goalsScored: number,
-  goalsConceded: number,
-  trend: Array<string>,
-  points: number,
-  win: number,
-  lose: number,
-  draw: number,
-  gd?: number,
+  place: number | string;
+  name: string;
+  goalsScored: number;
+  goalsConceded: number;
+  points: number;
+  gd: number;
+  win: number;
+  lose: number;
+  draw: number;
+  trend: Array<string>;
 }
 
 type ContextProps = {
-  results: Result[],
-  weekResults: TableI[],
-  matchWeek: number,
-  changeMatchWeek: (matchWeek: number) => void,
-  table: TableI[],
-}
+  results: Result[];
+  weekResults: TableI[];
+  matchWeek: number;
+  changeMatchWeek: (matchWeek: number) => void;
+  table: TableI[];
+};
 
 const ContextlProvider: React.FC<Props> = ({ children }) => {
-
   const [results, setResults] = useState<Result[]>([]);
+  const [matchWeek, setMatchWeek] = useState<number>(0);
   const [weekResults, setWeekResults] = useState<TableI[]>([]);
   const [table, setTable] = useState<TableI[]>([]);
-  const [matchWeek, setMatchWeek] = useState<number>(38);
 
+  // --------------------------------------------------------------------------
   useEffect(() => {
-
-    axios.get('/js-assignment/data.json')
+    axios
+      .get('/js-assignment/data.json')
       .then(response => {
-
         setResults(response.data);
-        getWeekResults(response.data[response.data.length - 1].matches);
-        setTableResults(response.data);
-
       })
       .catch(err => console.log(err));
-
   }, []);
 
-  const changeMatchWeek = (matchWeek: number) => {
-    setMatchWeek(matchWeek);
-    setTableResults(results.filter(el => el.round <= matchWeek));
-  }
+  // --------------------------------------------------------------------------
+  useEffect(() => {
+    if (results && results.length !== 0) {
+      changeMatchWeek(results.length);
+    }
+  }, [results]);
 
+  // --------------------------------------------------------------------------
+  // ----- changeMatchWeek
+  // --------------------------------------------------------------------------
+  const changeMatchWeek = (argMatchWeek: number) => {
+    setMatchWeek(argMatchWeek);
+    storeWeekResults(argMatchWeek);
+    storeTableResults(results.filter(el => el.round <= argMatchWeek));
+  };
 
-  const getWeekResults = (matches: Match[]): TableI[] => {
-    let arr: TableI[] = [];
+  // --------------------------------------------------------------------------
+  // ----- storeWeekResults
+  // --------------------------------------------------------------------------
+  const storeWeekResults = (argMatchWeek: number) => {
+
+    const arr: TableI[] = [];
+    const matches: Match[] = results[argMatchWeek - 1].matches;
 
     for (let i = 0; i < matches.length; i++) {
-      let team = Object.getOwnPropertyNames(matches[i]);
-      let score = Object.values(matches[i]);
+      const team = Object.getOwnPropertyNames(matches[i]);
+      const score = Object.values(matches[i]);
 
-      arr.push({
-        name: team[0],
-        goalsScored: score[0],
-        goalsConceded: score[1],
-        points: score[0] > score[1] ? 3 : (score[0] < score[1] ? 0 : 1),
-        win: score[0] > score[1] ? 1 : 0,
-        lose: score[0] < score[1] ? 1 : 0,
-        draw: score[0] === score[1] ? 1 : 0,
-        trend: score[0] > score[1] ? ['w'] : (score[0] < score[1] ? ['l'] : ['d']),
-      }, {
-        name: team[1],
-        goalsScored: score[1],
-        goalsConceded: score[0],
-        win: score[1] > score[0] ? 1 : 0,
-        lose: score[1] < score[0] ? 1 : 0,
-        draw: score[1] === score[0] ? 1 : 0,
-        points: score[1] > score[0] ? 3 : (score[1] < score[0] ? 0 : 1),
-        trend: score[1] > score[0] ? ['w'] : (score[1] < score[0] ? ['l'] : ['d']),
-      });
+      arr.push(
+        {
+          name: team[0],
+          goalsScored: score[0],
+          goalsConceded: score[1],
+          points: score[0] > score[1] ? 3 : score[0] < score[1] ? 0 : 1,
+          place: '',
+          gd: 0,
+          win: 0,
+          lose: 0,
+          draw: 0,
+          trend: []
+        },
+        {
+          name: team[1],
+          goalsScored: score[1],
+          goalsConceded: score[0],
+          points: score[1] > score[0] ? 3 : score[1] < score[0] ? 0 : 1,
+          place: '',
+          gd: 0,
+          win: 0,
+          lose: 0,
+          draw: 0,
+          trend: []
+        }
+      );
     }
+    
+    setWeekResults(arr);
+  };
 
-    return arr;
-  }
+  // --------------------------------------------------------------------------
+  // ----- storeTableResults
+  // --------------------------------------------------------------------------
+  const storeTableResults = (argResults: Result[]) => {
+    const tempTable: TableI[] = [];
 
+    for (let i = 0; i < argResults.length; i++) {
+      for (let j = 0; j < argResults[i].matches.length; j++) {
+        const team = Object.getOwnPropertyNames(argResults[i].matches[j]);
+        const score = Object.values(argResults[i].matches[j]);
 
-  const setTableResults = (results: Result[]) => {
-    let arr: TableI[];
-    let tableTemp: TableI[] = [];
+        for (let k = 0; k < 2; k++) {
+          const name = team[k];
+          const goalsScored = score[k];
+          const goalsConceded = score[1 - k];
+          const points =
+            score[k] > score[1 - k] ? 3 : score[k] < score[1 - k] ? 0 : 1;
+          const trend =
+            score[k] > score[1 - k] ? 'w' : score[k] < score[1 - k] ? 'l' : 'd';
+          let indexClub = -1;
 
-    setWeekResults(getWeekResults(results[results.length - 1].matches));
-
-    for (let i = 0; i < results.length; i++) {
-      arr = getWeekResults(results[i].matches);
-
-      if (tableTemp.length < 20) {
-        tableTemp = arr.map(el => el);
-      } else {
-        for (let j = 0; j < tableTemp.length; j++)
-          for (let k = 0; k < tableTemp.length; k++) {
-            if (tableTemp[j].name === arr[k].name) {
-              tableTemp[j].goalsScored += arr[k].goalsScored;
-              tableTemp[j].goalsConceded += arr[k].goalsConceded;
-              tableTemp[j].points += arr[k].points;
-              tableTemp[j].win += arr[k].win;
-              tableTemp[j].lose += arr[k].lose;
-              tableTemp[j].draw += arr[k].draw;
-              if (results.length - i < 5)
-                tableTemp[j].trend.push(arr[k].trend[0]);
+          for (let l = 0; l < tempTable.length; l++) {
+            if (tempTable[l].name === name) {
+              indexClub = l;
+              break;
             }
           }
-      }
 
+          if (indexClub === -1) {
+            const clubTable: TableI = {
+              place: '',
+              name,
+              goalsScored,
+              goalsConceded,
+              points,
+              gd: goalsScored - goalsConceded,
+              win: points === 3 ? 1 : 0,
+              lose: points === 0 ? 1 : 0,
+              draw: points === 1 ? 1 : 0,
+              trend: [trend]
+            };
+
+            tempTable.push(clubTable);
+          } else {
+            tempTable[indexClub].goalsConceded += goalsConceded;
+            tempTable[indexClub].goalsScored += goalsScored;
+            tempTable[indexClub].points += points;
+            tempTable[indexClub].gd =
+              tempTable[indexClub].goalsScored -
+              tempTable[indexClub].goalsConceded;
+            tempTable[indexClub].win += points === 3 ? 1 : 0;
+            tempTable[indexClub].lose += points === 0 ? 1 : 0;
+            tempTable[indexClub].draw += points === 1 ? 1 : 0;
+            tempTable[indexClub].trend.push(trend);
+          }
+        }
+      }
     }
 
-    tableTemp = tableTemp.map(el => { return { ...el, gd: el.goalsScored - el.goalsConceded } });
-
-    tableTemp.sort((a, b) => {
-      if(a.points === b.points){
-        if(a.gd!==undefined && b.gd!== undefined && a.gd === b.gd)
-          return (a.goalsScored > b.goalsScored ? -1 : 1);
-        else if(a.gd !== undefined && b.gd !== undefined)
-          return (a.gd > b.gd ? -1 : 1)
-      } else
-        return(a.points > b.points ? -1 : 1)
-      return 0;
+    tempTable.sort((a, b) => {
+      if (a.points === b.points) {
+        if (a.gd === b.gd) {
+          return b.goalsScored - a.goalsScored;
+        }
+        return b.gd - a.gd;
+      }
+      return b.points - a.points;
     });
-    setTable(tableTemp);
-  }
 
+    let place = 1;
+    let oldPoints = -1;
+    let oldGd = -1;
+    let oldGoalsScored = -1;
+    for (let i = 0; i < tempTable.length; i++) {
+      if (tempTable[i].points !== oldPoints) {
+        tempTable[i].place = place;
+      } else if (tempTable[i].gd !== oldGd) {
+        tempTable[i].place = place;
+      } else if (tempTable[i].goalsScored !== oldGoalsScored) {
+        tempTable[i].place = place;
+      } else {
+        tempTable[i].place = '';
+      }
 
+      if (tempTable[i].trend.length > 5) {
+        tempTable[i].trend = tempTable[i].trend.slice(
+          tempTable[i].trend.length - 5
+        );
+      }
+
+      ++place;
+      oldPoints = tempTable[i].points;
+      oldGd = tempTable[i].gd;
+      oldGoalsScored = tempTable[i].goalsScored;
+    }
+
+    setTable(tempTable);
+  };
+
+  // --------------------------------------------------------------------------
   return (
     <MainContext.Provider
       value={{
         results,
         weekResults,
         matchWeek,
-        changeMatchWeek,
         table,
+        changeMatchWeek
       }}
     >
       {children}
     </MainContext.Provider>
   );
-}
+};
 
 export default ContextlProvider;

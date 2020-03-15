@@ -1,80 +1,65 @@
-import React, { useEffect } from 'react';
-import { Row, Col} from 'reactstrap';
+import React from 'react';
+import { Table } from 'reactstrap';
 
-import {TableI} from '../../context/index';
+import { TableI } from '../../context/index';
 
 import './index.css';
 
 interface Props {
-  tableP: TableI[],
+  tableP: TableI[];
 }
 
 const TableC: React.FC<Props> = ({ tableP }) => {
 
-  useEffect(() => {}, [tableP])
-  
-
   const showTable = () => {
     let tableTemp: Array<JSX.Element> = [];
 
-    tableTemp = tableP?.map( (el, index) => 
-      <Row className="table-row">
-        <Col lg="1" md="1" sm="1" xs="1"><b>{index+1}</b></Col>
-        <Col lg="3" md="3" sm="3" xs="3"><b>{el.name}</b></Col>
-        <Col lg="5" md="5" sm="5" xs="5">
-          <Row>
-            <Col lg="1" md="1" sm="1" xs="1">{el.win + el.lose + el.draw}</Col>
-            <Col lg="1" md="1" sm="1" xs="1">{el.win}</Col>
-            <Col lg="1" md="1" sm="1" xs="1">{el.draw}</Col>
-            <Col lg="1" md="1" sm="1" xs="1">{el.lose}</Col>
-            <Col lg="1" md="1" sm="1" xs="1">{el.goalsScored}</Col>
-            <Col lg="1" md="1" sm="1" xs="1">{el.goalsConceded}</Col>
-            <Col lg="1" md="1" sm="1" xs="1">{el.gd}</Col>
-            <Col lg="1" md="1" sm="1" xs="1"><b>{el.points}</b></Col>
-          </Row>
-        </Col>
-        <Col lg="3" md="3" sm="3" xs="3">
-          <Row>
-            {
-              el.trend.map(el => 
-                <Col
-                  lg="2" md="2" sm="2" xs="2"
-                  className={el === 'w' ? "form win" : ( el === 'l' ? "form lose" : "form")}
-                >
+    tableTemp = tableP.map((el, index) => (
+          <tr>
+            <td><b>{el.place}</b></td>
+            <td><b>{el.name}</b></td>
+            <td>{el.win + el.lose + el.draw}</td>
+            <td>{el.win}</td>
+            <td>{el.draw}</td>
+            <td>{el.lose}</td>
+            <td>{el.goalsScored}</td>
+            <td>{el.goalsConceded}</td>
+            <td>{el.gd}</td>
+            <td><b>{el.points}</b></td>
+            <td className="form-container">
+              {el.trend.map(el => (
+              <span
+                  className={
+                  el === 'w' ? 'form win' : el === 'l' ? 'form lose' : 'form'
+                  }
+              >
                   {el}
-                </Col>)
-            }
-          </Row>
-        </Col>
-      </Row>);
+              </span>
+              ))}
+            </td>
+        </tr>  
+      ));
 
-  tableTemp.unshift(
-    <Row className="table-row">
-      <Col lg="1" md="1" sm="1" xs="1">Position</Col>
-      <Col lg="3" md="3" sm="3" xs="3">Club</Col>
-      <Col lg="5" md="5" sm="5" xs="5">
-        <Row>
-          <Col lg="1" md="1" sm="1" xs="1">Pl</Col >
-          <Col lg="1" md="1" sm="1" xs="1">W</Col >
-          <Col lg="1" md="1" sm="1" xs="1">D</Col >
-          <Col lg="1" md="1" sm="1" xs="1">L</Col >
-          <Col lg="1" md="1" sm="1" xs="1">GF</Col >
-          <Col lg="1" md="1" sm="1" xs="1">GA</Col >
-          <Col lg="1" md="1" sm="1" xs="1">GD</Col >
-          <Col lg="1" md="1" sm="1" xs="1">Points</Col >
-        </Row>
-      </Col>
-      <Col lg="3" md="3" sm="3" xs="3">Form</Col>
-  </Row>);
+    tableTemp.unshift(
+      <tr>
+          <th>Position</th>
+          <th>Club</th>
+          <th>Pl</th>
+          <th>W</th>
+          <th>D</th>
+          <th>L</th>
+          <th>GF</th>
+          <th>GA</th>
+          <th>GD</th>
+          <th>Points</th>
+          <th>Form</th>            
+      </tr>
+    );
 
     return tableTemp;
   };
 
-  return (
-    <>
-      {tableP && showTable()}
-    </>
-  );
-}
+  return <Table responsive>{tableP && showTable()}</Table>;
+};
 
 export default TableC;

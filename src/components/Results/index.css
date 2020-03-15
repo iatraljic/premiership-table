@@ -1,51 +1,39 @@
 .result {
-    margin: 0;
-    display: flex;
-    align-items: center;
-    height: 6vh;
-    border-top: 1px solid #e8e8e8;
-    font-size: 1.2rem;
+  margin: 0;
+  align-items: center;
+  border-top: 1px solid #e8e8e8;
 }
 
-.team-left, .score-left {
-    padding: 0;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
+.team-home {
+  padding-right: 0.5rem;
+  text-align: right;
 }
 
-.team-right, .score-right {
-    padding: 0;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;    
+.team-guest {
+  padding-left: 0.5rem;
+  text-align: left;
 }
 
-.score-left > b, .score-right > b {
-    padding: 2px 0 2px 0;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 80%;
-    color: white;
-    background-color: #37063b;
-}
-
-.score-left > b {
-    border-right: 1px solid white;
+.score-home,
+.score-guest {
+  padding: 2px;
+  color: white;
+  background-color: #37063b;
+  text-align: center;
+  border: 1px solid white;
 }
 
 .w {
-    color: #13cf00;
+  color: #13cf00;
 }
 
 .l {
-    color: #d81820;
+  color: #d81820;
 }
-
+/*
 @media screen and (max-width: 768px) {
-    .result {
-        font-size: 10px;
-    }
+  .result {
+    font-size: 10px;
+  }
 }
+*/
